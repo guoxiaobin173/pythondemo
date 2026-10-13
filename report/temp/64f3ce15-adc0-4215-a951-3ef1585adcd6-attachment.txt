@@ -1,0 +1,12 @@
+INFO     common.recordlog:sendrequest.py:61 接口名称：校验商品库存
+INFO     common.recordlog:sendrequest.py:62 请求地址：http://127.0.0.1:8787/coupApply/cms/shoppingInventory
+INFO     common.recordlog:sendrequest.py:63 请求方式：post
+INFO     common.recordlog:sendrequest.py:64 测试用例名称：校验商品库存不足状态
+INFO     common.recordlog:sendrequest.py:65 请求头：{'Content-Type': 'application/json;charset=UTF-8'}
+INFO     common.recordlog:sendrequest.py:66 Cookie：None
+INFO     common.recordlog:sendrequest.py:75 请求参数：{'json': {'goodsId': '18382788819', 'count': 224, 'timeStamp': '1791896149'}}
+INFO     common.recordlog:sendrequest.py:33 接口返回信息：{"createTime":"2026-10-13 20:55:49","error":"商品库存不足","error_code":"0000","status":"1","translate_language":"zh-CN"}
+
+INFO     common.recordlog:assertions.py:75 相等断言成功：接口的实际结果为：{'status': '1'}，等于预期结果：{'status': '1'}
+ERROR    common.recordlog:assertions.py:154 测试失败！
+ERROR    common.recordlog:assertions.py:155 异常信息：'bool' object is not subscriptable

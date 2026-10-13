@@ -1,0 +1,1 @@
+{"data": {"username": "testadduser", "password": "test6789890", "role_id": 123456789, "dates": "2026-10-13 20:55:49", "phone": 13800000000, "token": "8Ad88bef08091957Acf9cA1f3B86b"}}

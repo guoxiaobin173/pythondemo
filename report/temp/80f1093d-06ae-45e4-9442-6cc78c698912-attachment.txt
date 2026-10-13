@@ -1,0 +1,13 @@
+INFO     common.recordlog:sendrequest.py:61 接口名称：商品提交订单
+INFO     common.recordlog:sendrequest.py:62 请求地址：http://127.0.0.1:8787/coupApply/cms/placeAnOrder
+INFO     common.recordlog:sendrequest.py:63 请求方式：post
+INFO     common.recordlog:sendrequest.py:64 测试用例名称：商品正常提交订单
+INFO     common.recordlog:sendrequest.py:65 请求头：{'Content-Type': 'application/json;charset=UTF-8'}
+INFO     common.recordlog:sendrequest.py:66 Cookie：None
+INFO     common.recordlog:sendrequest.py:75 请求参数：{'json': {'goods_id': '74190550836', 'number': 2, 'propertyChildIds': '2:9', 'inviter_id': '127839112', 'price': '128', 'freight_insurance': '0.00', 'discount_code': '002399', 'consignee_info': {'name': '张三', 'phone': '1380000000', 'address': '北京市海淀区西三环北路74号院4栋3单元1008'}}}
+INFO     common.recordlog:sendrequest.py:33 接口返回信息：{"crateTime":"2026-10-13 20:55:49","error":"","error_code":"0000","message":"提交订单成功","orderNumber":"347233232109739825344","translate_language":"zh-CN","userId":"7186220286712248815"}
+
+INFO     common.recordlog:apiutil.py:193 json提取到的参数：{'orderNumber': '347233232109739825344'}
+INFO     common.recordlog:apiutil.py:193 json提取到的参数：{'userId': '7186220286712248815'}
+INFO     common.recordlog:assertions.py:75 相等断言成功：接口的实际结果为：{'message': '提交订单成功'}，等于预期结果：{'message': '提交订单成功'}
+INFO     common.recordlog:assertions.py:152 测试成功！

@@ -1,0 +1,13 @@
+INFO     common.recordlog:sendrequest.py:61 接口名称：总调集团接单
+INFO     common.recordlog:sendrequest.py:62 请求地址：http://127.0.0.1:8787/api/order/pc/order/master/receive
+INFO     common.recordlog:sendrequest.py:63 请求方式：post
+INFO     common.recordlog:sendrequest.py:64 测试用例名称：总调集团接单成功
+INFO     common.recordlog:sendrequest.py:65 请求头：{'Content-Type': 'application/json;charset=UTF-8'}
+INFO     common.recordlog:sendrequest.py:66 Cookie：{'access_token_cookie': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc5MTg5NjE0OSwianRpIjoiMWNjMGI1MjYtMDVlYy00YjY2LTk2NjEtZGY4OWFhZjQxMjM1IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImV4YW1wbGVfdXNlciIsIm5iZiI6MTc5MTg5NjE0OSwiZXhwIjoxNzkxODk3MDQ5fQ.T0xHlkjxAzb3bGdOpTdNHgB4XnpXOiaLIfTLlVyhsic'}
+INFO     common.recordlog:sendrequest.py:75 请求参数：{'json': {'orderId': 'DD20261013171436886', 'times': '1791896149'}}
+INFO     common.recordlog:sendrequest.py:33 接口返回信息：{"code":20000,"data":true,"message":"操作成功"}
+
+INFO     common.recordlog:assertions.py:75 相等断言成功：接口的实际结果为：{'message': '操作成功'}，等于预期结果：{'message': '操作成功'}
+INFO     common.recordlog:assertions.py:54 字符串断言成功：预期结果：【20000】，实际结果：【20000】
+INFO     common.recordlog:assertions.py:75 相等断言成功：接口的实际结果为：{'data': True}，等于预期结果：{'data': True}
+INFO     common.recordlog:assertions.py:152 测试成功！

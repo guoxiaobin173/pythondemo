@@ -1,0 +1,12 @@
+INFO     common.recordlog:sendrequest.py:61 接口名称：删除用户
+INFO     common.recordlog:sendrequest.py:62 请求地址：http://127.0.0.1:8787/dar/user/deleteUser
+INFO     common.recordlog:sendrequest.py:63 请求方式：post
+INFO     common.recordlog:sendrequest.py:64 测试用例名称：正常删除用户
+INFO     common.recordlog:sendrequest.py:65 请求头：{'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'}
+INFO     common.recordlog:sendrequest.py:66 Cookie：None
+INFO     common.recordlog:sendrequest.py:72 请求参数：{'data': {'user_id': 123839387391912}}
+INFO     common.recordlog:sendrequest.py:33 接口返回信息：{"error_code":null,"msg":"删除成功!","msg_code":200}
+
+INFO     common.recordlog:assertions.py:37 contains断言成功：预期结果：【200】，实际结果：【200】
+INFO     common.recordlog:assertions.py:54 字符串断言成功：预期结果：【删除成功!】，实际结果：【删除成功!】
+INFO     common.recordlog:assertions.py:152 测试成功！

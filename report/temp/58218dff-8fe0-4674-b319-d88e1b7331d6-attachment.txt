@@ -1,0 +1,12 @@
+INFO     common.recordlog:conftest.py:18 --------------接口测试开始-------------
+INFO     common.recordlog:sendrequest.py:61 接口名称：用户登录
+INFO     common.recordlog:sendrequest.py:62 请求地址：http://127.0.0.1:8787/dar/user/login
+INFO     common.recordlog:sendrequest.py:63 请求方式：post
+INFO     common.recordlog:sendrequest.py:64 测试用例名称：用户名和密码错误校验
+INFO     common.recordlog:sendrequest.py:65 请求头：{'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'}
+INFO     common.recordlog:sendrequest.py:66 Cookie：None
+INFO     common.recordlog:sendrequest.py:72 请求参数：{'data': {'user_name': 'test01', 'passwd': 'admin456', 't': '1791896149'}}
+INFO     common.recordlog:sendrequest.py:33 接口返回信息：{"msg":"登录失败,用户名或密码错误","msg_code":9001,"token":null,"userId":null}
+
+ERROR    common.recordlog:assertions.py:154 测试失败！
+ERROR    common.recordlog:assertions.py:155 异常信息：'in <string>' requires string as left operand, not int

@@ -1,0 +1,12 @@
+INFO     common.recordlog:sendrequest.py:61 接口名称：添加购物车
+INFO     common.recordlog:sendrequest.py:62 请求地址：http://127.0.0.1:8787/coupApply/cms/shoppingJoinCart
+INFO     common.recordlog:sendrequest.py:63 请求方式：post
+INFO     common.recordlog:sendrequest.py:64 测试用例名称：正常添加购物车
+INFO     common.recordlog:sendrequest.py:65 请求头：{'Content-Type': 'application/json;charset=UTF-8'}
+INFO     common.recordlog:sendrequest.py:66 Cookie：None
+INFO     common.recordlog:sendrequest.py:75 请求参数：{'json': {'goods_id': '18382788819', 'count': 2, 'price': 99, 'timeStamp': '1791896149'}}
+INFO     common.recordlog:sendrequest.py:33 接口返回信息：{"cartList":[{"cid":632,"price":"99.00","productId":"18382788819","productImage":"https://omsproductionimg.yangkeduo.com/images/2017-12-12/bcf848aa71c6389607ae7a84b70f1543.jpeg","productName":"【2件套】套装秋冬新款仿獭兔毛钉珠皮草毛毛短外套加厚大衣女装","totalPrice":"239.00"},{"cid":932,"price":"108.00","productId":"33809635011","productImage":"https://omsproductionimg.yangkeduo.com/images/2017-12-12/bcf848aa71c6389607ae7a84b70f1543.jpeg","productName":"好奇小森林心钻装纸尿裤M22拉拉裤L18/XL14超薄透气裤型尿不湿 1件装","totalPrice":"347.00"},{"cid":838,"price":"17.80","productId":"56996760797","productImage":"https://omsproductionimg.yangkeduo.com/images/2017-12-12/efb5db42397550bffd3211ca6f197498.jpeg","productName":"冻干鸡小胸整块增肥营养发腮狗狗零食新手养猫零食幼猫零食100g","totalPrice":"364.80"}],"createTime":"2026-10-13 20:55:49","error":"","error_code":"0000","message":"success","translate_language":"zh-CN","userId":"7186220286712248815"}
+
+INFO     common.recordlog:assertions.py:75 相等断言成功：接口的实际结果为：{'message': 'success'}，等于预期结果：{'message': 'success'}
+ERROR    common.recordlog:assertions.py:154 测试失败！
+ERROR    common.recordlog:assertions.py:155 异常信息：'bool' object is not subscriptable
