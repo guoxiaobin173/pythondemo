@@ -1,6 +1,6 @@
 import pymysql
 import redis
-from rediscluster import RedisCluster
+
 
 from common.recordlog import logs
 from conf.operationConfig import OperationConfig
@@ -92,6 +92,7 @@ class RedisClient:
         if redis_nodes_str:
             # 集群操作
             # [host:port,host2:port2]
+            from rediscluster import RedisCluster
             nodes_str_list = redis_nodes_str.split(',')
             for node_str in nodes_str_list:
                 host,port = node_str.split(":")
