@@ -13,6 +13,6 @@
       validation:
         - status_code: 200
         - eq: { "message":"订单支付成功" }
-        - contains: {"error_code": "0000"}
+        - contains: {"code": "0000"}
 
 

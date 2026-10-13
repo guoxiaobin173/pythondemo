@@ -9,8 +9,8 @@ DIR_BASE = os.path.dirname(os.path.dirname(__file__))
 sys.path.append(DIR_BASE)
 
 # log日志输出级别
-LOG_LEVEL= logging.DEBUG    # 文件
-STREAM_LOG_LEVEL = logging.DEBUG    # 控制台
+LOG_LEVEL = logging.DEBUG  # 文件
+STREAM_LOG_LEVEL = logging.DEBUG  # 控制台
 
 # 接口超时时间，单位s
 API_TIMEOUT = 60
@@ -18,7 +18,7 @@ API_TIMEOUT = 60
 # excel文件的sheet页，默认读取第一页
 SHEET_ID = 0
 
-# 生成测试报告类型，可以生成两个风格的报告，allure或tm
+# 生成测试报告类型
 REPORT_TYPE = 'allure'
 
 # 是否发送钉钉消息

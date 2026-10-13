@@ -13,6 +13,5 @@
       validation:
         - status_code: 200
         - eq: { "message":"操作成功" }
-        - contains: {"error_code": "20000"}
-        - eq: {"data": true}
+        - contains: {"code": "20000"}
 

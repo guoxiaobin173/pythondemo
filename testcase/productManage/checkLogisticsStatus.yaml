@@ -20,7 +20,7 @@
       validation:
         - status_code: 200
         - eq: { "status": "1" }
-        - contains: { "error_code": "0000" }
+        - contains: { "code": "0000" }
 #    - case_name: 正常校验商品物流待收货状态
 #      json:
 #        orderNumber: 208019542305257723473

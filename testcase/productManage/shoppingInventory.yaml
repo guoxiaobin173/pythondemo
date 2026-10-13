@@ -24,4 +24,4 @@
       validation:
         - status_code: 200
         - eq: { "status": "1" }
-        - contains: { "error_code": "0000" }
+        - contains: { "code": "0000" }

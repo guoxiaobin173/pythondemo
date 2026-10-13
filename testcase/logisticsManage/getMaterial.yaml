@@ -8,10 +8,9 @@
   testCase:
     - case_name: 成功获取下单材料
       validation:
-        - status_code: 200
         - eq: { "message":"操作成功" }
-        - contains: {"error_code": "20000"}
-      extract:
-        materials: $.material
+        - contains: {"code": "20000","status_code": 200}
+      extract_list:
+        materialId: $.material[*]
 
 

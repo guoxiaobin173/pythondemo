@@ -20,7 +20,7 @@
           orderMark: "货主下单"
           cusId: "1661242770195464193"
         orderCapacityList:
-          - materialCategoryId: "1676511586856882178"
+          - materialCategoryId: ${get_extract_data_list(materialId,0)}
             materialCategory: "粮食"
             materialName: "小麦"
             materialUnit: "KG"
@@ -55,7 +55,7 @@
       validation:
         - status_code: 200
         - eq: { "message":"操作成功" }
-        - contains: {"error_code": "20000"}
+        - contains: {"code": "20000"}
         - eq: {"data": true}
       extract:
         orderNo: $.orderNo

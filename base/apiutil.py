@@ -1,3 +1,4 @@
+import ast
 import json
 import re
 
@@ -37,7 +38,7 @@ class RequestBase:
             print(i)
             start_index = str_data.index("$")
             while start_index + 1 < len(str_data) and str_data[start_index + 1] != "{":
-                start_index = str_data.index("$",start_index+1)
+                start_index = str_data.index("$", start_index + 1)
             # 从$开始往后找对应的}
             end_index = str_data.index("}", start_index)
             # yaml文件的参数，方法名（参数）
@@ -71,7 +72,7 @@ class RequestBase:
             data = str_data
         return data
 
-    def specification_yaml(self, case_info):
+    def specification_yaml(self, base_info, testcase):
         """
         把易读测试用例yaml翻译成python程序可执行动作的核心代码块
         yaml是测试用例声明
@@ -87,57 +88,66 @@ class RequestBase:
         :param case_info: list类型，调试取case_info[0]-->dict
         :return:
         """
-        # if isinstance(data, str):
-        #     # 转回字典
-        #     case_info = json.loads(data)
-        # print(type(case_info))
+        case_info = dict(base_info, **testcase)
         cookies = None
         params_type = ['params', 'data', 'json']
         try:
             base_url = self.conf.get_envi('host')
             print(base_url)
-            url = base_url + case_info['baseInfo']['url']
+            url = base_url + case_info.pop('url', None)
             allure.attach(url, f'接口地址：{url}')
-            api_name = case_info['baseInfo']['api_name']
+            api_name = case_info.pop('api_name', None)
             allure.attach(api_name, f"接口名称：{api_name}")
-            method = case_info['baseInfo']['method']
+            method = case_info.pop('method', None)
             allure.attach(method, f"请求方法：{method}")
-            headers = case_info['baseInfo']['header']
+            headers = case_info.pop('header', None)
             header_str = json.dumps(headers, ensure_ascii=False, indent=2)
             allure.attach(header_str, f"请求头：{header_str}", allure.attachment_type.TEXT)
             try:
-                cookies = self.replace_load(case_info['baseInfo']['cookies'])
+                cookies = self.replace_load(case_info['cookies'])
+                case_info.pop("cookies", None)
                 if isinstance(cookies, str):
-                    cookies = json.loads(cookies.replace("'","\""))
+                    # 字符串"None" → None
+                    if cookies.strip().upper() == "NONE":
+                        cookies = None
+                    # 字符串形式的字典，还原成dict
+                    elif cookies.strip().startswith("{") and cookies.strip().endswith("}"):
+                        try:
+                            cookies = ast.literal_eval(cookies)
+                        except Exception:
+                            logs.warning(f"cookie字符串无法转为字典：{cookies}")
+                            cookies = None
             except:
                 pass
 
-            tc = case_info['testCase']
-            case_name = tc.pop('case_name', None)
+            case_name = case_info.pop('case_name', None)
             allure.attach(case_name, f"测试用例名称：{case_name}")
-            validation = tc.pop('validation', None)
-            extract = tc.pop('extract', None)
+            validation = case_info.pop('validation', None)
+            extract = case_info.pop('extract', None)
             # 如果提取得变量只有一个则返回None
-            extract_list = tc.pop('extract_list', None)
+            extract_list = case_info.pop('extract_list', None)
 
-            for key, value in tc.items():
+            # 处理文件上传接口
+            file, files = case_info.pop('files', None), None
+            if file is not None:
+                for fk, fv in file.items():
+                    allure.attach(json.dumps(file), "导入文件")
+                    files = {fk: open(fv, mode="rb")}
+
+            for key, value in case_info.items():
                 if key in params_type:
-                    tc[key] = self.replace_load(value)
+                    case_info[key] = self.replace_load(value)
+
             res = self.send.run_main(api_name=api_name,
                                      url=url,
                                      case_name=case_name,
                                      headers=headers,
                                      method=method,
                                      cookies=cookies,
-                                     files=None,
-                                     **tc)
+                                     files=files,
+                                     **case_info)
             allure.attach(res.text, "接口的响应信息", allure.attachment_type.TEXT)
             allure.attach(str(res.status_code), f"接口状态码：{res.status_code}", allure.attachment_type.TEXT)
-            if res.cookies:
-                cookie_dict = dict(res.cookies)
-                cookie = dict()
-                cookie["cookies"]=cookie_dict
-                self.read.write_yaml_data(cookie)
             res_text = res.text
             res_json = res.json()
             if extract is not None:

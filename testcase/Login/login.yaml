@@ -5,20 +5,6 @@
     header:
       Content-Type: application/x-www-form-urlencoded;charset=UTF-8
   testCase:
-    - case_name: 用户名和密码正确登录验证
-      data:
-        user_name: test01
-        passwd: admin123
-        t: ${get_stamp_time()}
-      validation:
-        - contains: {'msg':'成功'}
-        - contains: {'status_code': 200}
-        - eq: {'msg': '登录成功'}
-        - ne: {'msg':'登录失败'}
-      extract:
-#        token: '"token":"(.*?)"'
-         token: $.token
-         cookies: cookies
     - case_name: 用户名和密码错误校验
       data:
         user_name: test01
@@ -27,3 +13,16 @@
       validation:
         - contains: { "msg_code":9001 }
         - eq: { 'msg': '登录失败,用户名或密码错误' }
+    - case_name: 用户名和密码正确登录验证
+      data:
+        user_name: test01
+        passwd: admin123
+        t: ${get_stamp_time()}
+      validation:
+        - contains: { 'msg': '成功' }
+        - contains: { 'status_code': 200 }
+        - eq: { 'msg': '登录成功' }
+        - ne: { 'msg': '登录失败' }
+      extract:
+#       token: '"token":"(.*?)"'
+        token: $.token

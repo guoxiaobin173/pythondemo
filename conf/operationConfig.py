@@ -16,6 +16,7 @@ class OperationConfig:
             self.__filpath = filepath
 
         self.conf = configparser.ConfigParser()
+
         try:
             self.conf.read(self.__filpath, encoding='utf-8')
         except Exception as e:
@@ -64,8 +65,8 @@ class OperationConfig:
     def get_section_mysql(self, option):
         return self.get_section_for_data("MYSQL", option)
 
-    def get_section_redis(self, option):
-        return self.get_section_for_data("REDIS", option)
+    # def get_section_redis(self, option):
+    #     return self.get_section_for_data("REDIS", option)
 
     def get_section_clickhouse(self, option):
         return self.get_section_for_data("CLICKHOUSE", option)
@@ -84,9 +85,13 @@ class OperationConfig:
         return self.get_section_for_data("api_envi", option)
 
     def get_mysql_conf(self, option):
-        """获取MySQL的ip地址"""
+        """获取MySQL的配置内容"""
         return self.get_section_for_data('MYSQL', option)
 
     def get_section_jenkins(self, option):
         """获取jenkins的内容"""
         return self.get_section_for_data('JENKINS', option)
+
+    def get_redis_conf(self, option):
+        """获取REDIS的配置内容"""
+        return self.get_section_for_data('REDIS', option)

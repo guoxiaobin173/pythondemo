@@ -1,12 +1,10 @@
 import operator
 import os.path
-
 import allure
 import jsonpath
-
 from common.readyaml import get_testcase_yaml
 from common.recordlog import logs
-from common.connection import ConnectMysql
+from common.connectdb import ConnectMysql
 
 
 class Assertions:
@@ -37,43 +35,49 @@ class Assertions:
                         logs.error("contains断言失败，接口返回码【%s】不等于【%s】" % (status_code, assert_value))
                     else:
                         logs.info("contains断言成功：预期结果：【%s】，实际结果：【%s】" % (status_code, assert_value))
+                    continue
+                # $..递归向下搜索key
+                res_list = jsonpath.jsonpath(response, '$..%s' % assert_key)
+                # jsonpath找不到匹配会返回None，必须先判断
+                if res_list is None:
+                    flag += 1
+                    logs.error(f"contains断言失败：未找到字段【{assert_key}】")
+                    continue
+                # 原逻辑：字符串包含。如果提取出来是字符串，直接做in；如果是其他类型，转为字符串再做包含匹配
+                real_val = res_list[0]
+                if isinstance(real_val, str):
+                    real_str = real_val
                 else:
-                    # $是json根节点，..是递归向下搜索，不限层级
-                    # 在整个json里，任意深度查找所有key名称=assert_key的字段
-                    res_list = jsonpath.jsonpath(response, '$..%s' % assert_key)
-                    if isinstance(res_list[0], str):
-                        res_list = ''.join(res_list)
-                    if res_list:
-                        # 包含断言，比如msg预期结果为”成功“，接口响应实际msg为“登录成功”，那么”成功“包含在”登录成功”内，属于包含断言
-                        if assert_value in res_list:
-                            logs.info("字符串断言成功：预期结果：【%s】，实际结果：【%s】" % (assert_value, res_list))
-                        else:
-                            flag += 1
-                            logs.error(f"响应文本断言失败：预期结果为：【%s】，实际结果为：【%s】" % (assert_value, res_list))
+                    real_str = str(real_val)
+
+                if assert_value in real_str:
+                    logs.info("字符串断言成功：预期结果：【%s】，实际结果：【%s】" % (assert_value, real_str))
+                else:
+                    flag += 1
+                    logs.error(f"响应文本断言失败：预期结果为：【%s】，实际结果为：【%s】" % (assert_value, real_str))
         else:
-            raise TypeError("相等断言失败--类型错误，预期结果和接口的实际响应结果必须为字典类型")
+            raise TypeError("contains断言失败--类型错误，预期结果和接口的实际响应结果必须为字典类型")
         return flag
 
     def equal_assert(self, value, response):
-        """相等断言"""
+        """相等断言：只校验yaml里写的key，不修改原始response对象"""
         flag = 0
-        res_list = []
         if isinstance(value, dict) and isinstance(response, dict):
-            # 处理接口响应实际数据，保持与预期结果的数据结构一致
-            for res in response:
-                if res != list(value.keys())[0]:
-                    res_list.append(res)
-            for rl in res_list:
-                del response[rl]
-            # 判断实际结果和预期结果是否相等
-            eq_assert = operator.eq(response, value)
+            resp_copy = {}
+            for assert_key in value.keys():
+                if assert_key in response:
+                    resp_copy[assert_key] = response[assert_key]
+                else:
+                    flag += 1
+                    logs.error(f"相等断言失败：响应中不存在key【{assert_key}】")
+            eq_assert = operator.eq(resp_copy, value)
             if eq_assert:
-                logs.info(f"相等断言成功：接口的实际结果为：{response}，等于预期结果：{str(value)}")
+                logs.info(f"相等断言成功：接口的实际结果为：{resp_copy}，等于预期结果：{str(value)}")
             else:
                 flag += 1
-                logs.error(f"相等断言失败：忌口的实际结果为：{response}，不等于预期结果：{str(value)}")
+                logs.error(f"相等断言失败：接口的实际结果为：{resp_copy}，不等于预期结果：{str(value)}")
         else:
-            raise TypeError("相等断言失败--类型错误，预期结果和接口的实际响应结果必须为字典类型")
+            raise TypeError("equal断言失败--类型错误，预期结果和接口的实际响应结果必须为字典类型")
         return flag
 
     def not_equal_assert(self, value, response):
@@ -84,29 +88,28 @@ class Assertions:
         :return:
         """
         flag = 0
-        res_list = []
         if isinstance(value, dict) and isinstance(response, dict):
-            # 处理接口响应实际数据，保持与预期结果的数据结构一致
-            for res in response:
-                if res != list(value.keys())[0]:
-                    res_list.append(res)
-            for rl in res_list:
-                del response[rl]
-            # 判断实际结果和预期结果是否不相等，不相等返回true
-            eq_assert = operator.ne(response, value)
+            resp_copy = {}
+            for assert_key in value.keys():
+                if assert_key in response:
+                    resp_copy[assert_key] = response[assert_key]
+                else:
+                    flag += 1
+                    logs.error(f"不相等断言失败：响应中不存在key【{assert_key}】")
+            eq_assert = operator.ne(resp_copy, value)
             if eq_assert:
-                logs.info(f"不相等断言成功：接口的预期结果：{str(value)}，不等于实际结果为：{response}")
+                logs.info(f"不相等断言成功：接口的预期结果：{str(value)}，不等于实际结果为：{resp_copy}")
             else:
                 flag += 1
-                logs.error(f"不相等断言成功：接口的预期结果：{str(value)}，等于实际结果为：{response}")
+                logs.error(f"不相等断言失败：接口的预期结果：{str(value)}，等于实际结果为：{resp_copy}")
         else:
-            raise TypeError("相等断言失败--类型错误，预期结果和接口的实际响应结果必须为字典类型")
+            raise TypeError("not_equal断言失败--类型错误，预期结果和接口的实际响应结果必须为字典类型")
         return flag
 
     def assert_mysql(self, expected_sql):
         """
         数据库断言
-        :param expected_sql: 预期结果，也就是yaml文件中中的sal语句
+        :param expected_sql: 预期结果，也就是yaml文件中的sql语句
         :return:
         """
         flag = 0
@@ -131,7 +134,7 @@ class Assertions:
         try:
             # expected是预期结果列表
             for yq in expected:
-                # yq是字典，{‘contains’:{'msg':'登录成功'}}
+                # yq是字典，{'contains':{'msg':'登录成功'}}
                 for key, value in yq.items():
                     # value是{'msg':'登录成功'}
                     if key == "contains":

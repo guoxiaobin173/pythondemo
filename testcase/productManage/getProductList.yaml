@@ -12,7 +12,7 @@
         size: 20
       validation:
         - status_code: 200
-        - contains: { "error_code":"0000" }
+        - contains: { "code":"0000" }
       extract_list:
         goodsId: $.goodsList[*].goodsId
 

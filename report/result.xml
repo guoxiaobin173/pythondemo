@@ -1,1 +1,1162 @@
-<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="4" time="1.117" timestamp="2026-07-28T16:47:15.194947+08:00" hostname="thinkbook14"><testcase classname="testcase.Login.test_login.TestLogin" name="test_case01[params0]" time="0.333" /><testcase classname="testcase.Login.test_login.TestLogin" name="test_case02[params0]" time="0.049" /><testcase classname="testcase.productManager.test_productList.TestLogin" name="test_get_product_list[params0]" time="0.027" /><testcase classname="testcase.productManager.test_productList.TestLogin" name="test_get_product_detail[params0]" time="0.047" /></testsuite></testsuites>
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="12" skipped="0" tests="19" time="2.589" timestamp="2026-10-13T17:50:09.879744+08:00" hostname="thinkbook14"><testcase classname="testcase.Login.test_login.TestLogin" name="test_login[base_info0-testcase0]" time="0.268" /><testcase classname="testcase.Login.test_login.TestLogin" name="test_login[base_info1-testcase1]" time="0.040" /><testcase classname="testcase.logisticsManage.test_logistics.TestLogistics" name="test_get_material[base_info0-testcase0]" time="0.040"><failure message="AssertionError">self = &lt;common.assertions.Assertions object at 0x00000293298F1250&gt;
+expected = [{'status_code': 200}, {'eq': {'message': '操作成功'}}, {'contains': {'code': '20000'}}]
+response = {'code': 20000, 'data': True, 'material': ['1676511586856882178', '1676511586856882134', '1676511524756882178', '1676590766856882178', '1676511586812182178'], 'message': '操作成功'}
+status_code = 200
+
+    def assert_result(self, expected, response, status_code):
+        """
+        断言模式，通过all_flag标记断言结果
+        :param expected: 预期结果
+        :param response: 接口实际返回结果（json格式）
+        :param status_code: 响应状态码
+        :return:
+        """
+        all_flag = 0
+        try:
+            # expected是预期结果列表
+            for yq in expected:
+                # yq是字典，{‘contains’:{'msg':'登录成功'}}
+                for key, value in yq.items():
+                    # value是{'msg':'登录成功'}
+                    if key == "contains":
+                        flag = self.contains_assert(value, response, status_code)
+                    elif key == "eq":
+                        flag = self.equal_assert(value, response)
+                    elif key == "ne":
+                        flag = self.not_equal_assert(value, response)
+                    elif key == "db":
+                        flag = self.assert_mysql(value)
+                    else:
+                        flag = 0
+                    all_flag += flag
+&gt;           assert all_flag == 0
+                   ^^^^^^^^^^^^^
+E           AssertionError
+
+common\assertions.py:150: AssertionError
+
+During handling of the above exception, another exception occurred:
+
+self = &lt;test_logistics.TestLogistics object at 0x00000293298015D0&gt;
+base_info = {'api_name': '获取下单材料', 'url': '/api/order/customer/orderPlan/getMaterial', 'method': 'post', 'header': {'Content-Type': 'application/json;charset=UTF-8'}, ...}
+testcase = {'case_name': '成功获取下单材料', 'validation': [{'status_code': 200}, {'eq': {'message': '操作成功'}}, {'contains': {'code': '20000'}}], 'extract_list': {'materialId': '$.material[*]'}}
+
+    @allure.story(next(c_id) + "获取下单材料")
+    @pytest.mark.parametrize('base_info,testcase', get_testcase_yaml("./testcase/logisticsManage/getMaterial.yaml"))
+    def test_get_material(self, base_info, testcase):
+        allure.dynamic.title(testcase['case_name'])
+&gt;       RequestBase().specification_yaml(base_info, testcase)
+
+testcase\logisticsManage\test_logistics.py:15: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+base\apiutil.py:164: in specification_yaml
+    raise e
+base\apiutil.py:160: in specification_yaml
+    ass.assert_result(expected=validation, response=res_json, status_code=res.status_code)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;common.assertions.Assertions object at 0x00000293298F1250&gt;
+expected = [{'status_code': 200}, {'eq': {'message': '操作成功'}}, {'contains': {'code': '20000'}}]
+response = {'code': 20000, 'data': True, 'material': ['1676511586856882178', '1676511586856882134', '1676511524756882178', '1676590766856882178', '1676511586812182178'], 'message': '操作成功'}
+status_code = 200
+
+    def assert_result(self, expected, response, status_code):
+        """
+        断言模式，通过all_flag标记断言结果
+        :param expected: 预期结果
+        :param response: 接口实际返回结果（json格式）
+        :param status_code: 响应状态码
+        :return:
+        """
+        all_flag = 0
+        try:
+            # expected是预期结果列表
+            for yq in expected:
+                # yq是字典，{‘contains’:{'msg':'登录成功'}}
+                for key, value in yq.items():
+                    # value是{'msg':'登录成功'}
+                    if key == "contains":
+                        flag = self.contains_assert(value, response, status_code)
+                    elif key == "eq":
+                        flag = self.equal_assert(value, response)
+                    elif key == "ne":
+                        flag = self.not_equal_assert(value, response)
+                    elif key == "db":
+                        flag = self.assert_mysql(value)
+                    else:
+                        flag = 0
+                    all_flag += flag
+            assert all_flag == 0
+            logs.info("测试成功！")
+        except Exception as e:
+            logs.error("测试失败！")
+            logs.error(f"异常信息：{e}")
+&gt;           assert all_flag == 0
+                   ^^^^^^^^^^^^^
+E           AssertionError
+
+common\assertions.py:155: AssertionError</failure></testcase><testcase classname="testcase.logisticsManage.test_logistics.TestLogistics" name="test_commit_order[base_info0-testcase0]" time="0.041"><failure message="AssertionError">self = &lt;common.assertions.Assertions object at 0x00000293298F0250&gt;
+expected = [{'status_code': 200}, {'eq': {'message': '操作成功'}}, {'contains': {'code': '20000'}}, {'eq': {'data': True}}]
+response = {'code': 20000, 'data': True, 'message': '操作成功', 'orderNo': 'DD20261013171436886'}
+status_code = 200
+
+    def assert_result(self, expected, response, status_code):
+        """
+        断言模式，通过all_flag标记断言结果
+        :param expected: 预期结果
+        :param response: 接口实际返回结果（json格式）
+        :param status_code: 响应状态码
+        :return:
+        """
+        all_flag = 0
+        try:
+            # expected是预期结果列表
+            for yq in expected:
+                # yq是字典，{‘contains’:{'msg':'登录成功'}}
+                for key, value in yq.items():
+                    # value是{'msg':'登录成功'}
+                    if key == "contains":
+                        flag = self.contains_assert(value, response, status_code)
+                    elif key == "eq":
+                        flag = self.equal_assert(value, response)
+                    elif key == "ne":
+                        flag = self.not_equal_assert(value, response)
+                    elif key == "db":
+                        flag = self.assert_mysql(value)
+                    else:
+                        flag = 0
+                    all_flag += flag
+&gt;           assert all_flag == 0
+                   ^^^^^^^^^^^^^
+E           AssertionError
+
+common\assertions.py:150: AssertionError
+
+During handling of the above exception, another exception occurred:
+
+self = &lt;test_logistics.TestLogistics object at 0x0000029329801DD0&gt;
+base_info = {'api_name': '货主创建订单', 'url': '/api/order/customer/orderPlan/create', 'method': 'post', 'header': {'Content-Type': 'application/json;charset=UTF-8'}, ...}
+testcase = {'case_name': '货主成功创建订单', 'json': {'orderInfo': {'template': 'define', 'urgentType': 2, 'cusName': '总仓', 'orderType': ...': {'message': '操作成功'}}, {'contains': {'code': '20000'}}, {'eq': {'data': True}}], 'extract': {'orderNo': '$.orderNo'}}
+
+    @allure.story(next(c_id) + "货主创建订单")
+    @pytest.mark.parametrize('base_info,testcase', get_testcase_yaml("./testcase/logisticsManage/commitOrder.yaml"))
+    def test_commit_order(self, base_info, testcase):
+        allure.dynamic.title(testcase['case_name'])
+&gt;       RequestBase().specification_yaml(base_info, testcase)
+
+testcase\logisticsManage\test_logistics.py:21: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+base\apiutil.py:164: in specification_yaml
+    raise e
+base\apiutil.py:160: in specification_yaml
+    ass.assert_result(expected=validation, response=res_json, status_code=res.status_code)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;common.assertions.Assertions object at 0x00000293298F0250&gt;
+expected = [{'status_code': 200}, {'eq': {'message': '操作成功'}}, {'contains': {'code': '20000'}}, {'eq': {'data': True}}]
+response = {'code': 20000, 'data': True, 'message': '操作成功', 'orderNo': 'DD20261013171436886'}
+status_code = 200
+
+    def assert_result(self, expected, response, status_code):
+        """
+        断言模式，通过all_flag标记断言结果
+        :param expected: 预期结果
+        :param response: 接口实际返回结果（json格式）
+        :param status_code: 响应状态码
+        :return:
+        """
+        all_flag = 0
+        try:
+            # expected是预期结果列表
+            for yq in expected:
+                # yq是字典，{‘contains’:{'msg':'登录成功'}}
+                for key, value in yq.items():
+                    # value是{'msg':'登录成功'}
+                    if key == "contains":
+                        flag = self.contains_assert(value, response, status_code)
+                    elif key == "eq":
+                        flag = self.equal_assert(value, response)
+                    elif key == "ne":
+                        flag = self.not_equal_assert(value, response)
+                    elif key == "db":
+                        flag = self.assert_mysql(value)
+                    else:
+                        flag = 0
+                    all_flag += flag
+            assert all_flag == 0
+            logs.info("测试成功！")
+        except Exception as e:
+            logs.error("测试失败！")
+            logs.error(f"异常信息：{e}")
+&gt;           assert all_flag == 0
+                   ^^^^^^^^^^^^^
+E           AssertionError
+
+common\assertions.py:155: AssertionError</failure></testcase><testcase classname="testcase.logisticsManage.test_logistics.TestLogistics" name="test_receive_order[base_info0-testcase0]" time="0.043"><failure message="AssertionError">self = &lt;common.assertions.Assertions object at 0x0000029329A21190&gt;
+expected = [{'status_code': 200}, {'eq': {'message': '操作成功'}}, {'contains': {'code': '20000'}}, {'eq': {'data': True}}]
+response = {'code': 20000, 'data': True, 'message': '操作成功'}, status_code = 200
+
+    def assert_result(self, expected, response, status_code):
+        """
+        断言模式，通过all_flag标记断言结果
+        :param expected: 预期结果
+        :param response: 接口实际返回结果（json格式）
+        :param status_code: 响应状态码
+        :return:
+        """
+        all_flag = 0
+        try:
+            # expected是预期结果列表
+            for yq in expected:
+                # yq是字典，{‘contains’:{'msg':'登录成功'}}
+                for key, value in yq.items():
+                    # value是{'msg':'登录成功'}
+                    if key == "contains":
+                        flag = self.contains_assert(value, response, status_code)
+                    elif key == "eq":
+                        flag = self.equal_assert(value, response)
+                    elif key == "ne":
+                        flag = self.not_equal_assert(value, response)
+                    elif key == "db":
+                        flag = self.assert_mysql(value)
+                    else:
+                        flag = 0
+                    all_flag += flag
+&gt;           assert all_flag == 0
+                   ^^^^^^^^^^^^^
+E           AssertionError
+
+common\assertions.py:150: AssertionError
+
+During handling of the above exception, another exception occurred:
+
+self = &lt;test_logistics.TestLogistics object at 0x0000029329803950&gt;
+base_info = {'api_name': '总调集团接单', 'url': '/api/order/pc/order/master/receive', 'method': 'post', 'header': {'Content-Type': 'application/json;charset=UTF-8'}, ...}
+testcase = {'case_name': '总调集团接单成功', 'json': {'orderId': '${get_extract_data(orderNo)}', 'times': '${get_stamp_time()}'}, 'validation': [{'status_code': 200}, {'eq': {'message': '操作成功'}}, {'contains': {'code': '20000'}}, {'eq': {'data': True}}]}
+
+    @allure.story(next(c_id) + "总调集团接单")
+    @pytest.mark.parametrize('base_info,testcase', get_testcase_yaml("./testcase/logisticsManage/receiveOrder.yaml"))
+    def test_receive_order(self, base_info, testcase):
+        allure.dynamic.title(testcase['case_name'])
+&gt;       RequestBase().specification_yaml(base_info, testcase)
+
+testcase\logisticsManage\test_logistics.py:27: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+base\apiutil.py:164: in specification_yaml
+    raise e
+base\apiutil.py:160: in specification_yaml
+    ass.assert_result(expected=validation, response=res_json, status_code=res.status_code)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;common.assertions.Assertions object at 0x0000029329A21190&gt;
+expected = [{'status_code': 200}, {'eq': {'message': '操作成功'}}, {'contains': {'code': '20000'}}, {'eq': {'data': True}}]
+response = {'code': 20000, 'data': True, 'message': '操作成功'}, status_code = 200
+
+    def assert_result(self, expected, response, status_code):
+        """
+        断言模式，通过all_flag标记断言结果
+        :param expected: 预期结果
+        :param response: 接口实际返回结果（json格式）
+        :param status_code: 响应状态码
+        :return:
+        """
+        all_flag = 0
+        try:
+            # expected是预期结果列表
+            for yq in expected:
+                # yq是字典，{‘contains’:{'msg':'登录成功'}}
+                for key, value in yq.items():
+                    # value是{'msg':'登录成功'}
+                    if key == "contains":
+                        flag = self.contains_assert(value, response, status_code)
+                    elif key == "eq":
+                        flag = self.equal_assert(value, response)
+                    elif key == "ne":
+                        flag = self.not_equal_assert(value, response)
+                    elif key == "db":
+                        flag = self.assert_mysql(value)
+                    else:
+                        flag = 0
+                    all_flag += flag
+            assert all_flag == 0
+            logs.info("测试成功！")
+        except Exception as e:
+            logs.error("测试失败！")
+            logs.error(f"异常信息：{e}")
+&gt;           assert all_flag == 0
+                   ^^^^^^^^^^^^^
+E           AssertionError
+
+common\assertions.py:155: AssertionError</failure></testcase><testcase classname="testcase.logisticsManage.test_logistics.TestLogistics" name="test_assign_order[base_info0-testcase0]" time="0.029"><failure message="AssertionError">self = &lt;common.assertions.Assertions object at 0x0000029329A21310&gt;
+expected = [{'status_code': 200}, {'eq': {'message': '操作成功'}}, {'contains': {'code': '20000'}}, {'eq': {'data': True}}]
+response = {'code': 20000, 'data': True, 'message': '操作成功'}, status_code = 200
+
+    def assert_result(self, expected, response, status_code):
+        """
+        断言模式，通过all_flag标记断言结果
+        :param expected: 预期结果
+        :param response: 接口实际返回结果（json格式）
+        :param status_code: 响应状态码
+        :return:
+        """
+        all_flag = 0
+        try:
+            # expected是预期结果列表
+            for yq in expected:
+                # yq是字典，{‘contains’:{'msg':'登录成功'}}
+                for key, value in yq.items():
+                    # value是{'msg':'登录成功'}
+                    if key == "contains":
+                        flag = self.contains_assert(value, response, status_code)
+                    elif key == "eq":
+                        flag = self.equal_assert(value, response)
+                    elif key == "ne":
+                        flag = self.not_equal_assert(value, response)
+                    elif key == "db":
+                        flag = self.assert_mysql(value)
+                    else:
+                        flag = 0
+                    all_flag += flag
+&gt;           assert all_flag == 0
+                   ^^^^^^^^^^^^^
+E           AssertionError
+
+common\assertions.py:150: AssertionError
+
+During handling of the above exception, another exception occurred:
+
+self = &lt;test_logistics.TestLogistics object at 0x00000293297FCA10&gt;
+base_info = {'api_name': '总调集团分配订单', 'url': '/api/order/pc/order/assign', 'method': 'post', 'header': {'Content-Type': 'application/json;charset=UTF-8'}, ...}
+testcase = {'case_name': '集团成功分配订单', 'json': {'orderId': '${get_extract_data(orderNo)}', 'orgId': '6140913758128971280'}, 'validation': [{'status_code': 200}, {'eq': {'message': '操作成功'}}, {'contains': {'code': '20000'}}, {'eq': {'data': True}}]}
+
+    @allure.story(next(c_id) + "总调集团分配订单")
+    @pytest.mark.parametrize('base_info,testcase', get_testcase_yaml("./testcase/logisticsManage/assignOrder.yaml"))
+    def test_assign_order(self, base_info, testcase):
+        allure.dynamic.title(testcase['case_name'])
+&gt;       RequestBase().specification_yaml(base_info, testcase)
+
+testcase\logisticsManage\test_logistics.py:33: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+base\apiutil.py:164: in specification_yaml
+    raise e
+base\apiutil.py:160: in specification_yaml
+    ass.assert_result(expected=validation, response=res_json, status_code=res.status_code)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;common.assertions.Assertions object at 0x0000029329A21310&gt;
+expected = [{'status_code': 200}, {'eq': {'message': '操作成功'}}, {'contains': {'code': '20000'}}, {'eq': {'data': True}}]
+response = {'code': 20000, 'data': True, 'message': '操作成功'}, status_code = 200
+
+    def assert_result(self, expected, response, status_code):
+        """
+        断言模式，通过all_flag标记断言结果
+        :param expected: 预期结果
+        :param response: 接口实际返回结果（json格式）
+        :param status_code: 响应状态码
+        :return:
+        """
+        all_flag = 0
+        try:
+            # expected是预期结果列表
+            for yq in expected:
+                # yq是字典，{‘contains’:{'msg':'登录成功'}}
+                for key, value in yq.items():
+                    # value是{'msg':'登录成功'}
+                    if key == "contains":
+                        flag = self.contains_assert(value, response, status_code)
+                    elif key == "eq":
+                        flag = self.equal_assert(value, response)
+                    elif key == "ne":
+                        flag = self.not_equal_assert(value, response)
+                    elif key == "db":
+                        flag = self.assert_mysql(value)
+                    else:
+                        flag = 0
+                    all_flag += flag
+            assert all_flag == 0
+            logs.info("测试成功！")
+        except Exception as e:
+            logs.error("测试失败！")
+            logs.error(f"异常信息：{e}")
+&gt;           assert all_flag == 0
+                   ^^^^^^^^^^^^^
+E           AssertionError
+
+common\assertions.py:155: AssertionError</failure></testcase><testcase classname="testcase.logisticsManage.test_logistics.TestLogistics" name="test_get_order[base_info0-testcase0]" time="0.048"><failure message="AssertionError">self = &lt;common.assertions.Assertions object at 0x0000029329986CD0&gt;
+expected = [{'status_code': 200}, {'eq': {'message': '操作成功'}}, {'contains': {'code': '20000'}}, {'eq': {'data': True}}]
+response = {'code': 20000, 'data': {'logisticsStatus': '1', 'logistics_id': 'WL2026101317143610239'}, 'message': '操作成功'}
+status_code = 200
+
+    def assert_result(self, expected, response, status_code):
+        """
+        断言模式，通过all_flag标记断言结果
+        :param expected: 预期结果
+        :param response: 接口实际返回结果（json格式）
+        :param status_code: 响应状态码
+        :return:
+        """
+        all_flag = 0
+        try:
+            # expected是预期结果列表
+            for yq in expected:
+                # yq是字典，{‘contains’:{'msg':'登录成功'}}
+                for key, value in yq.items():
+                    # value是{'msg':'登录成功'}
+                    if key == "contains":
+                        flag = self.contains_assert(value, response, status_code)
+                    elif key == "eq":
+                        flag = self.equal_assert(value, response)
+                    elif key == "ne":
+                        flag = self.not_equal_assert(value, response)
+                    elif key == "db":
+                        flag = self.assert_mysql(value)
+                    else:
+                        flag = 0
+                    all_flag += flag
+&gt;           assert all_flag == 0
+                   ^^^^^^^^^^^^^
+E           AssertionError
+
+common\assertions.py:150: AssertionError
+
+During handling of the above exception, another exception occurred:
+
+self = &lt;test_logistics.TestLogistics object at 0x00000293297FCDD0&gt;
+base_info = {'api_name': '物流公司接单', 'url': '/api/order/pc/order/trans/receive', 'method': 'post', 'header': {'Content-Type': 'application/json;charset=UTF-8'}, ...}
+testcase = {'case_name': '物流公司成功接单', 'json': {'orderId': '${get_extract_data(orderNo)}', 'times': '${get_stamp_time()}'}, 'validation': [{'status_code': 200}, {'eq': {'message': '操作成功'}}, {'contains': {'code': '20000'}}, {'eq': {'data': True}}]}
+
+    @allure.story(next(c_id) + "物流公司接单")
+    @pytest.mark.parametrize('base_info,testcase', get_testcase_yaml("./testcase/logisticsManage/getOrder.yaml"))
+    def test_get_order(self, base_info, testcase):
+        allure.dynamic.title(testcase['case_name'])
+&gt;       RequestBase().specification_yaml(base_info, testcase)
+
+testcase\logisticsManage\test_logistics.py:39: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+base\apiutil.py:164: in specification_yaml
+    raise e
+base\apiutil.py:160: in specification_yaml
+    ass.assert_result(expected=validation, response=res_json, status_code=res.status_code)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;common.assertions.Assertions object at 0x0000029329986CD0&gt;
+expected = [{'status_code': 200}, {'eq': {'message': '操作成功'}}, {'contains': {'code': '20000'}}, {'eq': {'data': True}}]
+response = {'code': 20000, 'data': {'logisticsStatus': '1', 'logistics_id': 'WL2026101317143610239'}, 'message': '操作成功'}
+status_code = 200
+
+    def assert_result(self, expected, response, status_code):
+        """
+        断言模式，通过all_flag标记断言结果
+        :param expected: 预期结果
+        :param response: 接口实际返回结果（json格式）
+        :param status_code: 响应状态码
+        :return:
+        """
+        all_flag = 0
+        try:
+            # expected是预期结果列表
+            for yq in expected:
+                # yq是字典，{‘contains’:{'msg':'登录成功'}}
+                for key, value in yq.items():
+                    # value是{'msg':'登录成功'}
+                    if key == "contains":
+                        flag = self.contains_assert(value, response, status_code)
+                    elif key == "eq":
+                        flag = self.equal_assert(value, response)
+                    elif key == "ne":
+                        flag = self.not_equal_assert(value, response)
+                    elif key == "db":
+                        flag = self.assert_mysql(value)
+                    else:
+                        flag = 0
+                    all_flag += flag
+            assert all_flag == 0
+            logs.info("测试成功！")
+        except Exception as e:
+            logs.error("测试失败！")
+            logs.error(f"异常信息：{e}")
+&gt;           assert all_flag == 0
+                   ^^^^^^^^^^^^^
+E           AssertionError
+
+common\assertions.py:155: AssertionError</failure></testcase><testcase classname="testcase.productManage.test_productList.TestProductList" name="test_get_product_list[base_info0-testcase0]" time="0.049"><failure message="AssertionError">self = &lt;common.assertions.Assertions object at 0x00000293298FEF50&gt;
+expected = [{'status_code': 200}, {'contains': {'code': '0000'}}]
+response = {'api_info': 'today:21 max:10000 all[90=21+33+36];expires:2030-12-31', 'cache': 0, 'error_code': '0000', 'goodsList': ...images/2017-12-12/efb5db42397550bffd3211ca6f197498.jpeg', 'goods_name': '【新品零0CM嵌入式】海尔电冰箱410L家用法式四门多门官方正品', ...}], ...}
+status_code = 200
+
+    def assert_result(self, expected, response, status_code):
+        """
+        断言模式，通过all_flag标记断言结果
+        :param expected: 预期结果
+        :param response: 接口实际返回结果（json格式）
+        :param status_code: 响应状态码
+        :return:
+        """
+        all_flag = 0
+        try:
+            # expected是预期结果列表
+            for yq in expected:
+                # yq是字典，{‘contains’:{'msg':'登录成功'}}
+                for key, value in yq.items():
+                    # value是{'msg':'登录成功'}
+                    if key == "contains":
+                        flag = self.contains_assert(value, response, status_code)
+                    elif key == "eq":
+                        flag = self.equal_assert(value, response)
+                    elif key == "ne":
+                        flag = self.not_equal_assert(value, response)
+                    elif key == "db":
+                        flag = self.assert_mysql(value)
+                    else:
+                        flag = 0
+                    all_flag += flag
+&gt;           assert all_flag == 0
+                   ^^^^^^^^^^^^^
+E           AssertionError
+
+common\assertions.py:150: AssertionError
+
+During handling of the above exception, another exception occurred:
+
+self = &lt;test_productList.TestProductList object at 0x00000293297EE2D0&gt;
+base_info = {'api_name': '获取商品列表', 'url': '/coupApply/cms/goodsList', 'method': 'get', 'header': {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'}}
+testcase = {'case_name': '正常获取商品列表', 'params': {'msgType': 'getHandsetListOfCust', 'page': 1, 'size': 20}, 'validation': [{'status_code': 200}, {'contains': {'code': '0000'}}], 'extract_list': {'goodsId': '$.goodsList[*].goodsId'}}
+
+    @allure.story(next(c_id) + '成功获取商品列表')
+    @pytest.mark.parametrize('base_info,testcase', get_testcase_yaml('./testcase/productManage/getProductList.yaml'))
+    def test_get_product_list(self, base_info, testcase):
+        allure.dynamic.title(testcase['case_name'])
+&gt;       RequestBase().specification_yaml(base_info, testcase)
+
+testcase\productManage\test_productList.py:17: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+base\apiutil.py:164: in specification_yaml
+    raise e
+base\apiutil.py:160: in specification_yaml
+    ass.assert_result(expected=validation, response=res_json, status_code=res.status_code)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;common.assertions.Assertions object at 0x00000293298FEF50&gt;
+expected = [{'status_code': 200}, {'contains': {'code': '0000'}}]
+response = {'api_info': 'today:21 max:10000 all[90=21+33+36];expires:2030-12-31', 'cache': 0, 'error_code': '0000', 'goodsList': ...images/2017-12-12/efb5db42397550bffd3211ca6f197498.jpeg', 'goods_name': '【新品零0CM嵌入式】海尔电冰箱410L家用法式四门多门官方正品', ...}], ...}
+status_code = 200
+
+    def assert_result(self, expected, response, status_code):
+        """
+        断言模式，通过all_flag标记断言结果
+        :param expected: 预期结果
+        :param response: 接口实际返回结果（json格式）
+        :param status_code: 响应状态码
+        :return:
+        """
+        all_flag = 0
+        try:
+            # expected是预期结果列表
+            for yq in expected:
+                # yq是字典，{‘contains’:{'msg':'登录成功'}}
+                for key, value in yq.items():
+                    # value是{'msg':'登录成功'}
+                    if key == "contains":
+                        flag = self.contains_assert(value, response, status_code)
+                    elif key == "eq":
+                        flag = self.equal_assert(value, response)
+                    elif key == "ne":
+                        flag = self.not_equal_assert(value, response)
+                    elif key == "db":
+                        flag = self.assert_mysql(value)
+                    else:
+                        flag = 0
+                    all_flag += flag
+            assert all_flag == 0
+            logs.info("测试成功！")
+        except Exception as e:
+            logs.error("测试失败！")
+            logs.error(f"异常信息：{e}")
+&gt;           assert all_flag == 0
+                   ^^^^^^^^^^^^^
+E           AssertionError
+
+common\assertions.py:155: AssertionError</failure></testcase><testcase classname="testcase.productManage.test_productList.TestProductList" name="test_get_product_detail[base_info0-testcase0]" time="0.052"><failure message="AssertionError">self = &lt;common.assertions.Assertions object at 0x0000029329A51690&gt;
+expected = [{'status_code': 200}, {'contains': {'code': '0000'}}]
+response = {'api_info': 'today:21 max:10000 all[90=21+33+36];expires:2030-12-31', 'api_type': 'pinduoduo', 'cache': 0, 'call_args': {'num_iid': '1620002566'}, ...}
+status_code = 200
+
+    def assert_result(self, expected, response, status_code):
+        """
+        断言模式，通过all_flag标记断言结果
+        :param expected: 预期结果
+        :param response: 接口实际返回结果（json格式）
+        :param status_code: 响应状态码
+        :return:
+        """
+        all_flag = 0
+        try:
+            # expected是预期结果列表
+            for yq in expected:
+                # yq是字典，{‘contains’:{'msg':'登录成功'}}
+                for key, value in yq.items():
+                    # value是{'msg':'登录成功'}
+                    if key == "contains":
+                        flag = self.contains_assert(value, response, status_code)
+                    elif key == "eq":
+                        flag = self.equal_assert(value, response)
+                    elif key == "ne":
+                        flag = self.not_equal_assert(value, response)
+                    elif key == "db":
+                        flag = self.assert_mysql(value)
+                    else:
+                        flag = 0
+                    all_flag += flag
+&gt;           assert all_flag == 0
+                   ^^^^^^^^^^^^^
+E           AssertionError
+
+common\assertions.py:150: AssertionError
+
+During handling of the above exception, another exception occurred:
+
+self = &lt;test_productList.TestProductList object at 0x000002932980C090&gt;
+base_info = {'api_name': '获取商品详情接口', 'url': '/coupApply/cms/productDetail', 'method': 'post', 'header': {'Content-Type': 'application/json;charset=UTF-8'}}
+testcase = {'case_name': '正常获取商品详情接口', 'json': {'pro_id': '${get_extract_data_list(goodsId,0)}', 'page': 1, 'size': 20}, 'validation': [{'status_code': 200}, {'contains': {'code': '0000'}}]}
+
+    @allure.story(next(c_id) + '成功获取商品详情信息')
+    @pytest.mark.parametrize('base_info,testcase', get_testcase_yaml('./testcase/productManage/productDetail.yaml'))
+    def test_get_product_detail(self, base_info, testcase):
+        allure.dynamic.title(testcase['case_name'])
+&gt;       RequestBase().specification_yaml(base_info, testcase)
+
+testcase\productManage\test_productList.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+base\apiutil.py:164: in specification_yaml
+    raise e
+base\apiutil.py:160: in specification_yaml
+    ass.assert_result(expected=validation, response=res_json, status_code=res.status_code)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;common.assertions.Assertions object at 0x0000029329A51690&gt;
+expected = [{'status_code': 200}, {'contains': {'code': '0000'}}]
+response = {'api_info': 'today:21 max:10000 all[90=21+33+36];expires:2030-12-31', 'api_type': 'pinduoduo', 'cache': 0, 'call_args': {'num_iid': '1620002566'}, ...}
+status_code = 200
+
+    def assert_result(self, expected, response, status_code):
+        """
+        断言模式，通过all_flag标记断言结果
+        :param expected: 预期结果
+        :param response: 接口实际返回结果（json格式）
+        :param status_code: 响应状态码
+        :return:
+        """
+        all_flag = 0
+        try:
+            # expected是预期结果列表
+            for yq in expected:
+                # yq是字典，{‘contains’:{'msg':'登录成功'}}
+                for key, value in yq.items():
+                    # value是{'msg':'登录成功'}
+                    if key == "contains":
+                        flag = self.contains_assert(value, response, status_code)
+                    elif key == "eq":
+                        flag = self.equal_assert(value, response)
+                    elif key == "ne":
+                        flag = self.not_equal_assert(value, response)
+                    elif key == "db":
+                        flag = self.assert_mysql(value)
+                    else:
+                        flag = 0
+                    all_flag += flag
+            assert all_flag == 0
+            logs.info("测试成功！")
+        except Exception as e:
+            logs.error("测试失败！")
+            logs.error(f"异常信息：{e}")
+&gt;           assert all_flag == 0
+                   ^^^^^^^^^^^^^
+E           AssertionError
+
+common\assertions.py:155: AssertionError</failure></testcase><testcase classname="testcase.productManage.test_productList.TestProductList" name="test_place_an_order[base_info0-testcase0]" time="0.025" /><testcase classname="testcase.productManage.test_productList.TestProductList" name="test_order_pay[base_info0-testcase0]" time="0.055"><failure message="AssertionError">self = &lt;common.assertions.Assertions object at 0x0000029329A4C1D0&gt;
+expected = [{'status_code': 200}, {'eq': {'message': '订单支付成功'}}, {'contains': {'code': '0000'}}]
+response = {'createTime': '2026-10-13 17:50:12', 'error': '', 'error_code': '0000', 'message': '订单支付成功', ...}
+status_code = 200
+
+    def assert_result(self, expected, response, status_code):
+        """
+        断言模式，通过all_flag标记断言结果
+        :param expected: 预期结果
+        :param response: 接口实际返回结果（json格式）
+        :param status_code: 响应状态码
+        :return:
+        """
+        all_flag = 0
+        try:
+            # expected是预期结果列表
+            for yq in expected:
+                # yq是字典，{‘contains’:{'msg':'登录成功'}}
+                for key, value in yq.items():
+                    # value是{'msg':'登录成功'}
+                    if key == "contains":
+                        flag = self.contains_assert(value, response, status_code)
+                    elif key == "eq":
+                        flag = self.equal_assert(value, response)
+                    elif key == "ne":
+                        flag = self.not_equal_assert(value, response)
+                    elif key == "db":
+                        flag = self.assert_mysql(value)
+                    else:
+                        flag = 0
+                    all_flag += flag
+&gt;           assert all_flag == 0
+                   ^^^^^^^^^^^^^
+E           AssertionError
+
+common\assertions.py:150: AssertionError
+
+During handling of the above exception, another exception occurred:
+
+self = &lt;test_productList.TestProductList object at 0x000002932980F150&gt;
+base_info = {'api_name': '订单支付', 'url': '/coupApply/cms/orderPay', 'method': 'post', 'header': {'Content-Type': 'application/json;charset=UTF-8'}}
+testcase = {'case_name': '正常订单支付', 'json': {'orderNumber': '${get_extract_data(orderNumber)}', 'userId': '${get_extract_data(user...t_stamp_time()}'}, 'validation': [{'status_code': 200}, {'eq': {'message': '订单支付成功'}}, {'contains': {'code': '0000'}}]}
+
+    @allure.story(next(c_id) + '正常订单支付')
+    @pytest.mark.parametrize('base_info,testcase', get_testcase_yaml('./testcase/productManage/orderPay.yaml'))
+    def test_order_pay(self, base_info, testcase):
+        allure.dynamic.title(testcase['case_name'])
+&gt;       RequestBase().specification_yaml(base_info, testcase)
+
+testcase\productManage\test_productList.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+base\apiutil.py:164: in specification_yaml
+    raise e
+base\apiutil.py:160: in specification_yaml
+    ass.assert_result(expected=validation, response=res_json, status_code=res.status_code)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;common.assertions.Assertions object at 0x0000029329A4C1D0&gt;
+expected = [{'status_code': 200}, {'eq': {'message': '订单支付成功'}}, {'contains': {'code': '0000'}}]
+response = {'createTime': '2026-10-13 17:50:12', 'error': '', 'error_code': '0000', 'message': '订单支付成功', ...}
+status_code = 200
+
+    def assert_result(self, expected, response, status_code):
+        """
+        断言模式，通过all_flag标记断言结果
+        :param expected: 预期结果
+        :param response: 接口实际返回结果（json格式）
+        :param status_code: 响应状态码
+        :return:
+        """
+        all_flag = 0
+        try:
+            # expected是预期结果列表
+            for yq in expected:
+                # yq是字典，{‘contains’:{'msg':'登录成功'}}
+                for key, value in yq.items():
+                    # value是{'msg':'登录成功'}
+                    if key == "contains":
+                        flag = self.contains_assert(value, response, status_code)
+                    elif key == "eq":
+                        flag = self.equal_assert(value, response)
+                    elif key == "ne":
+                        flag = self.not_equal_assert(value, response)
+                    elif key == "db":
+                        flag = self.assert_mysql(value)
+                    else:
+                        flag = 0
+                    all_flag += flag
+            assert all_flag == 0
+            logs.info("测试成功！")
+        except Exception as e:
+            logs.error("测试失败！")
+            logs.error(f"异常信息：{e}")
+&gt;           assert all_flag == 0
+                   ^^^^^^^^^^^^^
+E           AssertionError
+
+common\assertions.py:155: AssertionError</failure></testcase><testcase classname="testcase.productManage.test_productList.TestProductList" name="test_shopping_join_cart[base_info0-testcase0]" time="0.019"><failure message="AssertionError">self = &lt;common.assertions.Assertions object at 0x00000293298732D0&gt;
+expected = [{'status_code': 200}, {'eq': {'message': 'success'}}, {'contains': {'code': '0000'}}]
+response = {'cartList': [{'cid': 118, 'price': '99.00', 'productId': '18382788819', 'productImage': 'https://omsproductionimg.yan...db42397550bffd3211ca6f197498.jpeg', ...}], 'createTime': '2026-10-13 17:50:12', 'error': '', 'error_code': '0000', ...}
+status_code = 200
+
+    def assert_result(self, expected, response, status_code):
+        """
+        断言模式，通过all_flag标记断言结果
+        :param expected: 预期结果
+        :param response: 接口实际返回结果（json格式）
+        :param status_code: 响应状态码
+        :return:
+        """
+        all_flag = 0
+        try:
+            # expected是预期结果列表
+            for yq in expected:
+                # yq是字典，{‘contains’:{'msg':'登录成功'}}
+                for key, value in yq.items():
+                    # value是{'msg':'登录成功'}
+                    if key == "contains":
+                        flag = self.contains_assert(value, response, status_code)
+                    elif key == "eq":
+                        flag = self.equal_assert(value, response)
+                    elif key == "ne":
+                        flag = self.not_equal_assert(value, response)
+                    elif key == "db":
+                        flag = self.assert_mysql(value)
+                    else:
+                        flag = 0
+                    all_flag += flag
+&gt;           assert all_flag == 0
+                   ^^^^^^^^^^^^^
+E           AssertionError
+
+common\assertions.py:150: AssertionError
+
+During handling of the above exception, another exception occurred:
+
+self = &lt;test_productList.TestProductList object at 0x0000029329820210&gt;
+base_info = {'api_name': '添加购物车', 'url': '/coupApply/cms/shoppingJoinCart', 'method': 'post', 'header': {'Content-Type': 'application/json;charset=UTF-8'}}
+testcase = {'case_name': '正常添加购物车', 'json': {'goods_id': '${get_extract_data_list(goodsId,1)}', 'count': 2, 'price': 99, 'timeSta..._stamp_time()}'}, 'validation': [{'status_code': 200}, {'eq': {'message': 'success'}}, {'contains': {'code': '0000'}}]}
+
+    @allure.story(next(c_id) + '成功添加商品到购物车')
+    @pytest.mark.parametrize('base_info,testcase', get_testcase_yaml('./testcase/productManage/shoppingJoinCart.yaml'))
+    def test_shopping_join_cart(self, base_info, testcase):
+        allure.dynamic.title(testcase['case_name'])
+&gt;       RequestBase().specification_yaml(base_info, testcase)
+
+testcase\productManage\test_productList.py:41: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+base\apiutil.py:164: in specification_yaml
+    raise e
+base\apiutil.py:160: in specification_yaml
+    ass.assert_result(expected=validation, response=res_json, status_code=res.status_code)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;common.assertions.Assertions object at 0x00000293298732D0&gt;
+expected = [{'status_code': 200}, {'eq': {'message': 'success'}}, {'contains': {'code': '0000'}}]
+response = {'cartList': [{'cid': 118, 'price': '99.00', 'productId': '18382788819', 'productImage': 'https://omsproductionimg.yan...db42397550bffd3211ca6f197498.jpeg', ...}], 'createTime': '2026-10-13 17:50:12', 'error': '', 'error_code': '0000', ...}
+status_code = 200
+
+    def assert_result(self, expected, response, status_code):
+        """
+        断言模式，通过all_flag标记断言结果
+        :param expected: 预期结果
+        :param response: 接口实际返回结果（json格式）
+        :param status_code: 响应状态码
+        :return:
+        """
+        all_flag = 0
+        try:
+            # expected是预期结果列表
+            for yq in expected:
+                # yq是字典，{‘contains’:{'msg':'登录成功'}}
+                for key, value in yq.items():
+                    # value是{'msg':'登录成功'}
+                    if key == "contains":
+                        flag = self.contains_assert(value, response, status_code)
+                    elif key == "eq":
+                        flag = self.equal_assert(value, response)
+                    elif key == "ne":
+                        flag = self.not_equal_assert(value, response)
+                    elif key == "db":
+                        flag = self.assert_mysql(value)
+                    else:
+                        flag = 0
+                    all_flag += flag
+            assert all_flag == 0
+            logs.info("测试成功！")
+        except Exception as e:
+            logs.error("测试失败！")
+            logs.error(f"异常信息：{e}")
+&gt;           assert all_flag == 0
+                   ^^^^^^^^^^^^^
+E           AssertionError
+
+common\assertions.py:155: AssertionError</failure></testcase><testcase classname="testcase.productManage.test_productList.TestProductList" name="test_check_order_status[base_info0-testcase0]" time="0.043"><failure message="AssertionError">self = &lt;common.assertions.Assertions object at 0x0000029329865F50&gt;
+expected = [{'status_code': 200}, {'eq': {'status': '0'}}, {'contains': {'code': '0000'}}]
+response = {'error': '', 'error_code': '', 'queryTime': '2026-10-13 17:50:12', 'status': '0', ...}
+status_code = 200
+
+    def assert_result(self, expected, response, status_code):
+        """
+        断言模式，通过all_flag标记断言结果
+        :param expected: 预期结果
+        :param response: 接口实际返回结果（json格式）
+        :param status_code: 响应状态码
+        :return:
+        """
+        all_flag = 0
+        try:
+            # expected是预期结果列表
+            for yq in expected:
+                # yq是字典，{‘contains’:{'msg':'登录成功'}}
+                for key, value in yq.items():
+                    # value是{'msg':'登录成功'}
+                    if key == "contains":
+                        flag = self.contains_assert(value, response, status_code)
+                    elif key == "eq":
+                        flag = self.equal_assert(value, response)
+                    elif key == "ne":
+                        flag = self.not_equal_assert(value, response)
+                    elif key == "db":
+                        flag = self.assert_mysql(value)
+                    else:
+                        flag = 0
+                    all_flag += flag
+&gt;           assert all_flag == 0
+                   ^^^^^^^^^^^^^
+E           AssertionError
+
+common\assertions.py:150: AssertionError
+
+During handling of the above exception, another exception occurred:
+
+self = &lt;test_productList.TestProductList object at 0x0000029329821050&gt;
+base_info = {'api_name': '校验商品订单状态', 'url': '/coupApply/cms/checkOrderStatus', 'method': 'post', 'header': {'Content-Type': 'application/json;charset=UTF-8'}}
+testcase = {'case_name': '正常校验商品订单已支付状态', 'json': {'orderNumber': '${get_extract_data(orderNumber)}', 'timeStamp': '${get_stamp_time()}'}, 'validation': [{'status_code': 200}, {'eq': {'status': '0'}}, {'contains': {'code': '0000'}}]}
+
+    @allure.story(next(c_id) + '正常校验商品订单状态')
+    @pytest.mark.parametrize('base_info,testcase', get_testcase_yaml('./testcase/productManage/checkOrderStatus.yaml'))
+    def test_check_order_status(self, base_info, testcase):
+        allure.dynamic.title(testcase['case_name'])
+&gt;       RequestBase().specification_yaml(base_info, testcase)
+
+testcase\productManage\test_productList.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+base\apiutil.py:164: in specification_yaml
+    raise e
+base\apiutil.py:160: in specification_yaml
+    ass.assert_result(expected=validation, response=res_json, status_code=res.status_code)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;common.assertions.Assertions object at 0x0000029329865F50&gt;
+expected = [{'status_code': 200}, {'eq': {'status': '0'}}, {'contains': {'code': '0000'}}]
+response = {'error': '', 'error_code': '', 'queryTime': '2026-10-13 17:50:12', 'status': '0', ...}
+status_code = 200
+
+    def assert_result(self, expected, response, status_code):
+        """
+        断言模式，通过all_flag标记断言结果
+        :param expected: 预期结果
+        :param response: 接口实际返回结果（json格式）
+        :param status_code: 响应状态码
+        :return:
+        """
+        all_flag = 0
+        try:
+            # expected是预期结果列表
+            for yq in expected:
+                # yq是字典，{‘contains’:{'msg':'登录成功'}}
+                for key, value in yq.items():
+                    # value是{'msg':'登录成功'}
+                    if key == "contains":
+                        flag = self.contains_assert(value, response, status_code)
+                    elif key == "eq":
+                        flag = self.equal_assert(value, response)
+                    elif key == "ne":
+                        flag = self.not_equal_assert(value, response)
+                    elif key == "db":
+                        flag = self.assert_mysql(value)
+                    else:
+                        flag = 0
+                    all_flag += flag
+            assert all_flag == 0
+            logs.info("测试成功！")
+        except Exception as e:
+            logs.error("测试失败！")
+            logs.error(f"异常信息：{e}")
+&gt;           assert all_flag == 0
+                   ^^^^^^^^^^^^^
+E           AssertionError
+
+common\assertions.py:155: AssertionError</failure></testcase><testcase classname="testcase.productManage.test_productList.TestProductList" name="test_check_logistics_status[base_info0-testcase0]" time="0.025"><failure message="AssertionError">self = &lt;common.assertions.Assertions object at 0x000002932989C710&gt;
+expected = [{'status_code': 200}, {'eq': {'status': '1'}}, {'contains': {'code': '0000'}}]
+response = {'error': '', 'error_code': '', 'queryTime': '2026-10-13 17:50:12', 'status': '1', ...}
+status_code = 200
+
+    def assert_result(self, expected, response, status_code):
+        """
+        断言模式，通过all_flag标记断言结果
+        :param expected: 预期结果
+        :param response: 接口实际返回结果（json格式）
+        :param status_code: 响应状态码
+        :return:
+        """
+        all_flag = 0
+        try:
+            # expected是预期结果列表
+            for yq in expected:
+                # yq是字典，{‘contains’:{'msg':'登录成功'}}
+                for key, value in yq.items():
+                    # value是{'msg':'登录成功'}
+                    if key == "contains":
+                        flag = self.contains_assert(value, response, status_code)
+                    elif key == "eq":
+                        flag = self.equal_assert(value, response)
+                    elif key == "ne":
+                        flag = self.not_equal_assert(value, response)
+                    elif key == "db":
+                        flag = self.assert_mysql(value)
+                    else:
+                        flag = 0
+                    all_flag += flag
+&gt;           assert all_flag == 0
+                   ^^^^^^^^^^^^^
+E           AssertionError
+
+common\assertions.py:150: AssertionError
+
+During handling of the above exception, another exception occurred:
+
+self = &lt;test_productList.TestProductList object at 0x0000029329821990&gt;
+base_info = {'api_name': '校验商品物流状态', 'url': '/coupApply/cms/checkLogisticsStatus', 'method': 'post', 'header': {'Content-Type': 'application/json;charset=UTF-8'}}
+testcase = {'case_name': '正常校验商品物流已发货状态', 'json': {'orderNumber': '${get_extract_data(orderNumber)}', 'timeStamp': '${get_stamp_time()}'}, 'validation': [{'status_code': 200}, {'eq': {'status': '1'}}, {'contains': {'code': '0000'}}]}
+
+    @allure.story(next(c_id) + '正常校验商品物流状态接口')
+    @pytest.mark.parametrize('base_info,testcase',
+                             get_testcase_yaml('./testcase/productManage/checkLogisticsStatus.yaml'))
+    def test_check_logistics_status(self, base_info, testcase):
+        allure.dynamic.title(testcase['case_name'])
+&gt;       RequestBase().specification_yaml(base_info, testcase)
+
+testcase\productManage\test_productList.py:54: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+base\apiutil.py:164: in specification_yaml
+    raise e
+base\apiutil.py:160: in specification_yaml
+    ass.assert_result(expected=validation, response=res_json, status_code=res.status_code)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;common.assertions.Assertions object at 0x000002932989C710&gt;
+expected = [{'status_code': 200}, {'eq': {'status': '1'}}, {'contains': {'code': '0000'}}]
+response = {'error': '', 'error_code': '', 'queryTime': '2026-10-13 17:50:12', 'status': '1', ...}
+status_code = 200
+
+    def assert_result(self, expected, response, status_code):
+        """
+        断言模式，通过all_flag标记断言结果
+        :param expected: 预期结果
+        :param response: 接口实际返回结果（json格式）
+        :param status_code: 响应状态码
+        :return:
+        """
+        all_flag = 0
+        try:
+            # expected是预期结果列表
+            for yq in expected:
+                # yq是字典，{‘contains’:{'msg':'登录成功'}}
+                for key, value in yq.items():
+                    # value是{'msg':'登录成功'}
+                    if key == "contains":
+                        flag = self.contains_assert(value, response, status_code)
+                    elif key == "eq":
+                        flag = self.equal_assert(value, response)
+                    elif key == "ne":
+                        flag = self.not_equal_assert(value, response)
+                    elif key == "db":
+                        flag = self.assert_mysql(value)
+                    else:
+                        flag = 0
+                    all_flag += flag
+            assert all_flag == 0
+            logs.info("测试成功！")
+        except Exception as e:
+            logs.error("测试失败！")
+            logs.error(f"异常信息：{e}")
+&gt;           assert all_flag == 0
+                   ^^^^^^^^^^^^^
+E           AssertionError
+
+common\assertions.py:155: AssertionError</failure></testcase><testcase classname="testcase.productManage.test_productList.TestProductList" name="test_product_inventory[base_info0-testcase0]" time="0.033"><failure message="AssertionError">self = &lt;common.assertions.Assertions object at 0x0000029329A31B50&gt;
+expected = [{'status_code': 200}, {'eq': {'status': '1'}}, {'contains': {'code': '0000'}}]
+response = {'createTime': '2026-10-13 17:50:12', 'error': '商品库存不足', 'error_code': '0000', 'status': '1', ...}
+status_code = 200
+
+    def assert_result(self, expected, response, status_code):
+        """
+        断言模式，通过all_flag标记断言结果
+        :param expected: 预期结果
+        :param response: 接口实际返回结果（json格式）
+        :param status_code: 响应状态码
+        :return:
+        """
+        all_flag = 0
+        try:
+            # expected是预期结果列表
+            for yq in expected:
+                # yq是字典，{‘contains’:{'msg':'登录成功'}}
+                for key, value in yq.items():
+                    # value是{'msg':'登录成功'}
+                    if key == "contains":
+                        flag = self.contains_assert(value, response, status_code)
+                    elif key == "eq":
+                        flag = self.equal_assert(value, response)
+                    elif key == "ne":
+                        flag = self.not_equal_assert(value, response)
+                    elif key == "db":
+                        flag = self.assert_mysql(value)
+                    else:
+                        flag = 0
+                    all_flag += flag
+&gt;           assert all_flag == 0
+                   ^^^^^^^^^^^^^
+E           AssertionError
+
+common\assertions.py:150: AssertionError
+
+During handling of the above exception, another exception occurred:
+
+self = &lt;test_productList.TestProductList object at 0x0000029329822490&gt;
+base_info = {'api_name': '校验商品库存', 'url': '/coupApply/cms/shoppingInventory', 'method': 'post', 'header': {'Content-Type': 'application/json;charset=UTF-8'}}
+testcase = {'case_name': '校验商品库存不足状态', 'json': {'goodsId': '${get_extract_data_list(goodsId,1)}', 'count': 224, 'timeStamp': '${get_stamp_time()}'}, 'validation': [{'status_code': 200}, {'eq': {'status': '1'}}, {'contains': {'code': '0000'}}]}
+
+    @allure.story(next(c_id) + '正常校验商品库存')
+    @pytest.mark.parametrize('base_info,testcase', get_testcase_yaml('./testcase/productManage/shoppingInventory.yaml'))
+    def test_product_inventory(self, base_info, testcase):
+        allure.dynamic.title(testcase['case_name'])
+&gt;       RequestBase().specification_yaml(base_info, testcase)
+
+testcase\productManage\test_productList.py:60: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+base\apiutil.py:164: in specification_yaml
+    raise e
+base\apiutil.py:160: in specification_yaml
+    ass.assert_result(expected=validation, response=res_json, status_code=res.status_code)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;common.assertions.Assertions object at 0x0000029329A31B50&gt;
+expected = [{'status_code': 200}, {'eq': {'status': '1'}}, {'contains': {'code': '0000'}}]
+response = {'createTime': '2026-10-13 17:50:12', 'error': '商品库存不足', 'error_code': '0000', 'status': '1', ...}
+status_code = 200
+
+    def assert_result(self, expected, response, status_code):
+        """
+        断言模式，通过all_flag标记断言结果
+        :param expected: 预期结果
+        :param response: 接口实际返回结果（json格式）
+        :param status_code: 响应状态码
+        :return:
+        """
+        all_flag = 0
+        try:
+            # expected是预期结果列表
+            for yq in expected:
+                # yq是字典，{‘contains’:{'msg':'登录成功'}}
+                for key, value in yq.items():
+                    # value是{'msg':'登录成功'}
+                    if key == "contains":
+                        flag = self.contains_assert(value, response, status_code)
+                    elif key == "eq":
+                        flag = self.equal_assert(value, response)
+                    elif key == "ne":
+                        flag = self.not_equal_assert(value, response)
+                    elif key == "db":
+                        flag = self.assert_mysql(value)
+                    else:
+                        flag = 0
+                    all_flag += flag
+            assert all_flag == 0
+            logs.info("测试成功！")
+        except Exception as e:
+            logs.error("测试失败！")
+            logs.error(f"异常信息：{e}")
+&gt;           assert all_flag == 0
+                   ^^^^^^^^^^^^^
+E           AssertionError
+
+common\assertions.py:155: AssertionError</failure></testcase><testcase classname="testcase.userManager.test_user.TestDebugApi" name="test_add_user[base_info0-testcase0]" time="0.044" /><testcase classname="testcase.userManager.test_user.TestDebugApi" name="test_delete_user[base_info0-testcase0]" time="0.044" /><testcase classname="testcase.userManager.test_user.TestDebugApi" name="test_query_user[base_info0-testcase0]" time="0.027" /><testcase classname="testcase.userManager.test_user.TestDebugApi" name="test_update_user[base_info0-testcase0]" time="0.026" /></testsuite></testsuites>

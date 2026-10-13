@@ -1,5 +1,4 @@
 import json
-
 import allure
 import requests
 import urllib3.exceptions
@@ -26,6 +25,11 @@ class SendRequest:
             # 登录接口是用同一个session发起请求，登录响应头set-cookie会自动存入session内部的cookiejar
             # 后续接口yaml不需要手动在请求头获取cookie
             result = self.session.request(**kwargs)
+            set_cookie = requests.utils.dict_from_cookiejar(result.cookies)
+            if set_cookie:
+                cookie['cookies'] = set_cookie
+                self.read.write_yaml_data(cookie)
+                logs.info("cookie: %s" % cookie)
             logs.info("接口返回信息：%s" % result.text if result.text else result)
         except requests.exceptions.ConnectionError:
             logs.error("ConnectionError--连接异常")

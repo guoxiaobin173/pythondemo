@@ -16,9 +16,11 @@ def get_testcase_yaml(file):
             if len(data) <= 1:
                 yaml_data = data[0]
                 base_info = yaml_data.get("baseInfo")
+                # 处理多个测试用例
                 for ts in yaml_data.get("testCase"):
-                    params = {'baseInfo': base_info, 'testCase': ts}
+                    params = [base_info, ts]
                     testcase_list.append(params)
+                print(testcase_list)
                 return testcase_list
             else:
                 return data
@@ -108,14 +110,6 @@ class ReadYamlData:
             # %s" % e格式化打印异常对象e，输出完整报错信息，node_name字段在extrac.yaml中找不到
             logs.error(f"【extract.yaml】没有找到：{node_name},--%s" % e)
 
-    def get_testCase_baseInfo(self, case_Info):
-        """
-        获取testcase yaml文件的baseInfo数据
-        :param case_Info:
-        :return:
-        """
-        pass
-
     def get_method(self):
         yaml_data = self.get_yaml_data()
         method = yaml_data[0].get('method')
@@ -132,3 +126,7 @@ class ReadYamlData:
         for da in yaml_data:
             data_list.append(da)
         return data_list
+
+
+if __name__ == '__main__':
+    get_testcase_yaml("../testcase/Login/login.yaml")
